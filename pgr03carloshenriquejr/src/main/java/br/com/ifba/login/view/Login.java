@@ -175,7 +175,7 @@ public class Login extends javax.swing.JFrame {
     private void txtCadastrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtCadastrarMouseClicked
         // TODO add your handling code here:
         new br.com.ifba.usuario.view.TelaCadastroUsuario().setVisible(true);
-        this.dispose();
+        this.dispose();// vai fechar a tela de login
     }//GEN-LAST:event_txtCadastrarMouseClicked
 
     /**
