@@ -131,16 +131,18 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
         char[] confirmarSenhaChar = txtConfSenha.getPassword();
         String senha = new String(senhaChar);
         String confirmarSenha = new String(confirmarSenhaChar);
-        
-        if(nome.isEmpty() || cpf.isEmpty() || email.isEmpty() || senha.isEmpty() || confirmarSenha.isEmpty()){
-             javax.swing.JOptionPane.showMessageDialog(this, "Preencha todos os campos.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
-        }else if(!senha.equals(confirmarSenha)){
-            javax.swing.JOptionPane.showMessageDialog(this, "As senhas não coincidem.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
-        }else {
-            javax.swing.JOptionPane.showMessageDialog(this, "Cadastro realizado com sucesso!", "Sucesso", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+       
+        if (nome.isEmpty() || cpf.isEmpty() || email.isEmpty() || senha.isEmpty() || confirmarSenha.isEmpty()) {
+    javax.swing.JOptionPane.showMessageDialog(this, "Preencha todos os campos.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+    } else if (!senha.equals(confirmarSenha)) {
+    javax.swing.JOptionPane.showMessageDialog(this, "As senhas não coincidem.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+    } else if (br.com.ifba.usuario.validar.ValidadorUsuario.palavraProibida(nome) 
+        || br.com.ifba.usuario.validar.ValidadorUsuario.palavraProibida(senha)) {
+    javax.swing.JOptionPane.showMessageDialog(this, "Login contém palavra não permitida.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+    } else {
+    javax.swing.JOptionPane.showMessageDialog(this, "Cadastro realizado com sucesso!", "Sucesso", javax.swing.JOptionPane.INFORMATION_MESSAGE);
     
-        }
-        
+}
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     /**
