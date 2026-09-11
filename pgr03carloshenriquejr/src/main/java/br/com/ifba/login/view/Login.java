@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package br.com.ifba.login.view;
-
+import br.com.ifba.usuario.entity.Usuario;
 /**
  *
  * @author carlos
@@ -155,10 +155,14 @@ public class Login extends javax.swing.JFrame {
        char[] senhaChar = txtSenha.getPassword();
        String senha = new String(senhaChar);
        
+       // vai instanciar o obj do dominio
+       Usuario usuario = new Usuario();
        
+       usuario.login = login;
+       usuario.senha = senha;
        
-       txtLog.append("Login digitado: " + login + "\n");
-       txtLog.append("Senha digitada: " + senha + "\n");
+       txtLog.append("Login digitado: " + usuario.login + "\n");
+       txtLog.append("Senha digitada: " + usuario.senha + "\n");
     }//GEN-LAST:event_btnEntrarActionPerformed
 
     private void txtSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenhaActionPerformed

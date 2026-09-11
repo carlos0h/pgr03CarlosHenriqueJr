@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package br.com.ifba.usuario.view;
-
+import br.com.ifba.usuario.entity.Usuario;
 /**
  *
  * @author carlos
@@ -30,6 +30,8 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
 
         jFrame1 = new javax.swing.JFrame();
         jTextField1 = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -42,6 +44,8 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
         txtSenha = new javax.swing.JPasswordField();
         btnCadastrar = new javax.swing.JButton();
         BtnCancelar = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        txtLogin = new javax.swing.JTextField();
 
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
         jFrame1.getContentPane().setLayout(jFrame1Layout);
@@ -56,39 +60,43 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
 
         jTextField1.setText("jTextField1");
 
+        jLabel6.setText("jLabel6");
+
+        jTextField2.setText("jTextField2");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("Nome Completo");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 50, -1, -1));
 
         jLabel2.setText("Email");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 160, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 130, -1, -1));
 
         jLabel3.setText("Senha");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 190, -1, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 210, -1, -1));
 
         jLabel4.setText("Confirmar Senha");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(29, 220, -1, -1));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, -1, -1));
 
         jLabel5.setText("CPF");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 110, -1, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 90, -1, -1));
 
         txtEmail.addActionListener(this::txtEmailActionPerformed);
-        getContentPane().add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 150, 224, -1));
+        getContentPane().add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 130, 224, -1));
 
         txtCpf.addActionListener(this::txtCpfActionPerformed);
-        getContentPane().add(txtCpf, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 110, 224, -1));
+        getContentPane().add(txtCpf, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 90, 224, -1));
 
         txtNomeComp.addActionListener(this::txtNomeCompActionPerformed);
-        getContentPane().add(txtNomeComp, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 70, 224, -1));
+        getContentPane().add(txtNomeComp, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 50, 224, -1));
 
         txtConfSenha.setText("jPasswordField1");
-        getContentPane().add(txtConfSenha, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 220, -1, -1));
+        getContentPane().add(txtConfSenha, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 230, -1, -1));
 
         txtSenha.setText("jPasswordField2");
         txtSenha.addActionListener(this::txtSenhaActionPerformed);
-        getContentPane().add(txtSenha, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 180, -1, -1));
+        getContentPane().add(txtSenha, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 200, -1, -1));
 
         btnCadastrar.setText("Cadastrar");
         btnCadastrar.addActionListener(this::btnCadastrarActionPerformed);
@@ -97,6 +105,12 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
         BtnCancelar.setText("Cancelar");
         BtnCancelar.addActionListener(this::BtnCancelarActionPerformed);
         getContentPane().add(BtnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 420, -1, -1));
+
+        jLabel7.setText("Login");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 170, -1, -1));
+
+        txtLogin.addActionListener(this::txtLoginActionPerformed);
+        getContentPane().add(txtLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 170, 220, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -132,7 +146,8 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
         String senha = new String(senhaChar);
         String confirmarSenha = new String(confirmarSenhaChar);
        
-        if (nome.isEmpty() || cpf.isEmpty() || email.isEmpty() || senha.isEmpty() || confirmarSenha.isEmpty()) {
+  
+        if (nome.isEmpty() || cpf.isEmpty() || email.isEmpty() || senha.isEmpty() || confirmarSenha.isEmpty()){
     javax.swing.JOptionPane.showMessageDialog(this, "Preencha todos os campos.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
     } else if (!senha.equals(confirmarSenha)) {
     javax.swing.JOptionPane.showMessageDialog(this, "As senhas não coincidem.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
@@ -140,10 +155,29 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
         || br.com.ifba.usuario.validar.ValidadorUsuario.palavraProibida(senha)) {
     javax.swing.JOptionPane.showMessageDialog(this, "Login contém palavra não permitida.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
     } else {
+        
+        Usuario usuario = new Usuario();
+        
+        usuario.nome = txtNomeComp.getText();
+        usuario.cpf = txtCpf.getText();
+        usuario.email = txtEmail.getText();
+        usuario.login = txtLogin.getText();
+        
+        usuario.senha = senha; // foi criada a partir do txtSenha.getPassword()
+        
     javax.swing.JOptionPane.showMessageDialog(this, "Cadastro realizado com sucesso!", "Sucesso", javax.swing.JOptionPane.INFORMATION_MESSAGE);
     
+    
+  
+      
+  
 }
     }//GEN-LAST:event_btnCadastrarActionPerformed
+
+    private void txtLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLoginActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_txtLoginActionPerformed
 
     /**
      * @param args the command line arguments
@@ -179,10 +213,14 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     private javax.swing.JPasswordField txtConfSenha;
     private javax.swing.JTextField txtCpf;
     private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtLogin;
     private javax.swing.JTextField txtNomeComp;
     private javax.swing.JPasswordField txtSenha;
     // End of variables declaration//GEN-END:variables
