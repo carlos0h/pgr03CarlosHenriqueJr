@@ -151,18 +151,18 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarActionPerformed
-       String login = txtLogin.getText();
-       char[] senhaChar = txtSenha.getPassword();
-       String senha = new String(senhaChar);
-       
-       // vai instanciar o obj do dominio
-       Usuario usuario = new Usuario();
-       
-       usuario.login = login;
-       usuario.senha = senha;
-       
-       txtLog.append("Login digitado: " + usuario.login + "\n");
-       txtLog.append("Senha digitada: " + usuario.senha + "\n");
+     String login = txtLogin.getText();
+   char[] senhaChar = txtSenha.getPassword();
+   String senha = new String(senhaChar);
+   
+     // usa o construtor vazio, ja que aqui so temos login e senha disponiveis
+    Usuario usuario = new Usuario();
+    usuario.setLogin(login);
+    usuario.setSenha(senha);
+   
+   txtLog.append("Login digitado: " + usuario.getLogin() + "\n");
+   txtLog.append("Senha digitada: " + usuario.getSenha() + "\n");
+
     }//GEN-LAST:event_btnEntrarActionPerformed
 
     private void txtSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenhaActionPerformed
