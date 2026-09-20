@@ -151,18 +151,24 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarActionPerformed
-     String login = txtLogin.getText();
-   char[] senhaChar = txtSenha.getPassword();
-   String senha = new String(senhaChar);
+     String loginDigitado = txtLogin.getText();
+    char[] senhaChar = txtSenha.getPassword();
+    String senhaDigitada = new String(senhaChar);
    
      // usa o construtor vazio, ja que aqui so temos login e senha disponiveis
-    Usuario usuario = new Usuario();
-    usuario.setLogin(login);
-    usuario.setSenha(senha);
+    Usuario usuarioCadastrado = new Usuario();
+    usuarioCadastrado.setLogin("carlos");
+    usuarioCadastrado.setSenha("12345");
    
-   txtLog.append("Login digitado: " + usuario.getLogin() + "\n");
-   txtLog.append("Senha digitada: " + usuario.getSenha() + "\n");
-
+   boolean acessoLiberado = usuarioCadastrado.autenticar(loginDigitado, senhaDigitada);
+   
+   if(acessoLiberado){
+       javax.swing.JOptionPane.showMessageDialog(this, "Acesso liberado!", "Sucesso", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+    } else {
+        javax.swing.JOptionPane.showMessageDialog(this, "Login ou senha incorretos.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+    }
+   
+   txtLog.append("Tentativa de login:" + loginDigitado + "\n");
     }//GEN-LAST:event_btnEntrarActionPerformed
 
     private void txtSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenhaActionPerformed
