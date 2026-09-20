@@ -147,14 +147,18 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
         String confirmarSenha = new String(confirmarSenhaChar);
        
   
-        if (nome.isEmpty() || cpf.isEmpty() || email.isEmpty() || senha.isEmpty() || confirmarSenha.isEmpty()){
+       if (!br.com.ifba.usuario.validar.ValidadorUsuario.camposPreenchidos(nome, cpf, email, senha, confirmarSenha)) {
     javax.swing.JOptionPane.showMessageDialog(this, "Preencha todos os campos.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
-    } else if (!senha.equals(confirmarSenha)) {
+} else if (!senha.equals(confirmarSenha)) {
     javax.swing.JOptionPane.showMessageDialog(this, "As senhas não coincidem.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
-    } else if (br.com.ifba.usuario.validar.ValidadorUsuario.palavraProibida(nome) 
-        || br.com.ifba.usuario.validar.ValidadorUsuario.palavraProibida(senha)) {
+} else if (!br.com.ifba.usuario.validar.ValidadorUsuario.cpfValido(cpf)) {
+    javax.swing.JOptionPane.showMessageDialog(this, "CPF inválido. Digite 11 números.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+} else if (!br.com.ifba.usuario.validar.ValidadorUsuario.senhaForte(senha)) {
+    javax.swing.JOptionPane.showMessageDialog(this, "Senha muito curta. Mínimo de 6 caracteres.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+} else if (br.com.ifba.usuario.validar.ValidadorUsuario.palavraProibida(nome) 
+    || br.com.ifba.usuario.validar.ValidadorUsuario.palavraProibida(senha)) {
     javax.swing.JOptionPane.showMessageDialog(this, "Login contém palavra não permitida.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
-    } else {
+} else {
         
         Usuario usuario = new Usuario(txtNomeComp.getText(), txtCpf.getText(), txtLogin.getText(), senha);
         usuario.setEmail(txtEmail.getText());
