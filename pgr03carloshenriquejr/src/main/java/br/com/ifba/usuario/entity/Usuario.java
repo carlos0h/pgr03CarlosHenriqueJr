@@ -63,6 +63,17 @@ public void setLogin(String login) {
         this.senha = senha;
     }
     
+    private Curriculo curriculo;
+    
+    public Curriculo getCurriculo(){
+        return curriculo;
+    }
+    
+    public void setCurriculo(Curriculo curriculo){
+        this.curriculo = curriculo;
+    }
+    
+    
     
     @Override
     public boolean autenticar(String login, String senha){
