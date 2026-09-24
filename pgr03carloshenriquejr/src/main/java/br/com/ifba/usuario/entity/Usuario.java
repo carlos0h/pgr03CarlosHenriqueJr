@@ -1,10 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package br.com.ifba.usuario.entity;
 import br.com.ifba.usuario.interfaces.Autenticavel;
 
+
+// classe base do dominio - superclasse de Candidato e Recrutador
 public class Usuario implements Autenticavel{
        
     private String nome;
@@ -13,7 +11,6 @@ public class Usuario implements Autenticavel{
     private String login;
     private String senha;
     
-        
     public Usuario(){
     }
     
@@ -51,7 +48,8 @@ public class Usuario implements Autenticavel{
     public String getLogin() {
         return login;
     }
-public void setLogin(String login) {
+    
+    public void setLogin(String login) {
         this.login = login;
     }
 
@@ -63,23 +61,17 @@ public void setLogin(String login) {
         this.senha = senha;
     }
     
-    private Curriculo curriculo;
-    
-    public Curriculo getCurriculo(){
-        return curriculo;
-    }
-    
-    public void setCurriculo(Curriculo curriculo){
-        this.curriculo = curriculo;
+    // metodo generico, sobrescrito por Candidato e Recrutador
+    public String getDescricao() {
+        return "Usuario: " + nome;
     }
     
     
     
+    // compara login e senha recebidos com os deste usuario
     @Override
     public boolean autenticar(String login, String senha){
         return this.login.equals(login) && this.senha.equals(senha);
     }
     
 }
-
-   

@@ -27,11 +27,11 @@ public class CurriculoTest {
     
     @Test
     public void usuarioDeveDevolverOMesmoCurriculoQueFoiDefinido(){
-        Usuario usuario = new Usuario();
+        Candidato candidato = new Candidato();
         Curriculo curriculo = new Curriculo();
         
-        usuario.setCurriculo(curriculo);
+        candidato.setCurriculo(curriculo);
         
-        assertSame(curriculo, usuario.getCurriculo());
+        assertSame(curriculo, candidato.getCurriculo());
     }
 }
