@@ -10,10 +10,17 @@ public class Candidato extends Usuario {
         super();
     }
     
-    // repassa nome, cpf, login e senha para o construtor de Usuario
+    // aqui o candidato está sem o curriculo ainda(cadastro inicial e coloca curriculo dps)
     public Candidato(String nome, String cpf, String login, String senha){
         super(nome, cpf, login, senha);
     }
+    
+    // candidato que vai se cadastrar com o curriculo pronto
+    public Candidato(String nome, String cpf, String login, String senha, Curriculo curriculo){
+        super(nome, cpf, login, senha);
+        this.curriculo = curriculo;
+    }
+    
     
     public Curriculo getCurriculo(){
         return curriculo;
