@@ -146,7 +146,7 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
         String senha = new String(senhaChar);
         String confirmarSenha = new String(confirmarSenhaChar);
        
-  
+        
        if (!br.com.ifba.usuario.validar.ValidadorUsuario.camposPreenchidos(nome, cpf, email, senha, confirmarSenha)) {
     javax.swing.JOptionPane.showMessageDialog(this, "Preencha todos os campos.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
 } else if (!senha.equals(confirmarSenha)) {
@@ -166,6 +166,7 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
         javax.swing.JOptionPane.showMessageDialog(this, "Usuário " + usuario.getNome() + " cadastrado com sucesso!", "Sucesso", javax.swing.JOptionPane.INFORMATION_MESSAGE);
          
     }
+       
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void txtLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLoginActionPerformed
@@ -197,7 +198,8 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new TelaCadastroUsuario().setVisible(true));
     }
-
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnCancelar;
     private javax.swing.JButton btnCadastrar;

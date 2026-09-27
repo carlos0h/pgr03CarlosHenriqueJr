@@ -185,6 +185,13 @@ Não encontradas.
 
 6. ## **7 Aprovação**
 
-Este documento foi revisado e aprovado por:
+Este documento foi revisado e aprovado por
+
+//
+
+## Sobrecarga: construtores de Candidato
+
+- `Candidato(nome, cpf, login, senha)` — usado no cadastro inicial, quando a pessoa ainda não preencheu o currículo (ela faz isso depois, na tela de currículo)
+- `Candidato(nome, cpf, login, senha, curriculo)` — usado quando o currículo já existe pronto no momento do cadastro (ex.: importação de dados de outra plataforma)
 
 
