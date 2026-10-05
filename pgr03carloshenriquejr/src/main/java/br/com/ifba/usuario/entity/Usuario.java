@@ -74,4 +74,26 @@ public class Usuario implements Autenticavel{
         return this.login.equals(login) && this.senha.equals(senha);
     }
     
+    // dois usuarios vao ser iguais se tiverem o msm CPF 
+    @Override
+    public boolean equals(Object obj){
+        if (this == obj){
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()){
+            return false;
+        }
+        Usuario outro = (Usuario) obj;
+        return cpf != null && cpf.equals(outro.cpf);
+    }
+    
+    @Override
+    public int hashCode(){
+        if(cpf != null){
+            return cpf.hashCode();
+        }else{
+            return 0; 
+        }
+    }
+    
 }
