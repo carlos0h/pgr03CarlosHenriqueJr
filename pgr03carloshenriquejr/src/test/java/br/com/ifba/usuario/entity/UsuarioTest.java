@@ -1,10 +1,10 @@
 
 package br.com.ifba.usuario.entity;
 
-
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-
+import java.util.ArrayList;
 
 public class UsuarioTest {
     
@@ -31,7 +31,14 @@ public class UsuarioTest {
         
         assertFalse(resultado);
     }
+   @Test
+    public void doisUsuariosComMesmoCpfSaoIguaisDepoisDeImplementarEquals() {
+    Usuario u1 = new Usuario("Carlos", "12345678901", "carlos", "12345");
+    Usuario u2 = new Usuario("Carlos", "12345678901", "carlos", "12345");
     
+    List<Usuario> lista = new ArrayList<>();
+    lista.add(u1);
     
-    
-}
+    assertTrue(lista.contains(u2));
+}   
+}   

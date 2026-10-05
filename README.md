@@ -194,4 +194,9 @@ Este documento foi revisado e aprovado por
 - `Candidato(nome, cpf, login, senha)` — usado no cadastro inicial, quando a pessoa ainda não preencheu o currículo (ela faz isso depois, na tela de currículo)
 - `Candidato(nome, cpf, login, senha, curriculo)` — usado quando o currículo já existe pronto no momento do cadastro (ex.: importação de dados de outra plataforma)
 
+## List vs Map para buscar por login
+
+Com a List, buscar por login percorre item por item (um `for`) até achar — com 10 usuários isso é instantâneo, mas com 10 mil pode exigir percorrer a lista inteira (pior caso: 10 mil comparações).
+Com o Map, a busca vai direto na chave (login) sem percorrer nada — o tempo praticamente não muda entre 10 e 10 mil usuários, por isso o repositório usa Map para indexar por login.
+
 
