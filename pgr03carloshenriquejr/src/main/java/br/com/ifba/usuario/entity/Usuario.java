@@ -1,14 +1,34 @@
 package br.com.ifba.usuario.entity;
 import br.com.ifba.usuario.interfaces.Autenticavel;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 // classe base do dominio - superclasse de Candidato e Recrutador
+@Entity
+@Table(name = "usuarios")
 public class Usuario implements Autenticavel{
+    
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
        
+    @Column(nullable = false)
     private String nome;
+    
+    @Column(nullable = false, unique = true, length = 11)
     private String cpf;
+    
     private String email;
+    
+    @Column(nullable = false, unique = true)
     private String login;
+    
+    @Column(nullable = false)
     private String senha;
     
     public Usuario(){
@@ -19,6 +39,10 @@ public class Usuario implements Autenticavel{
         this.cpf = cpf;
         this.login = login;
         this.senha = senha;
+    }
+    
+    public Long getId() {
+        return id;
     }
 
     public String getNome() {
