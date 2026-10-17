@@ -3,7 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package br.com.ifba.usuario.view;
-
+import br.com.ifba.usuario.entity.Usuario;
+import br.com.ifba.usuario.exception.LoginDuplicadoException;
+import br.com.ifba.usuario.exception.UsuarioNaoEncontradoException;
+import br.com.ifba.usuario.repositorio.RepositorioUsuarioJpa;
+import br.com.ifba.usuario.validar.ValidadorUsuario;
 /**
  *
  * @author carlos
@@ -15,9 +19,20 @@ public class TelaEditarUsuario extends javax.swing.JFrame {
     /**
      * Creates new form TelaEditarUsuario
      */
-    public TelaEditarUsuario() {
-        initComponents();
-    }
+   private final RepositorioUsuarioJpa repositorio = new RepositorioUsuarioJpa();
+private final Usuario usuario;
+private final TelaListarUsuarios listagem;
+
+public TelaEditarUsuario(Usuario usuario, TelaListarUsuarios listagem) {
+    initComponents();
+    this.usuario = usuario;
+    this.listagem = listagem;
+    // preenche os campos com os dados do usuario escolhido
+    txtNome.setText(usuario.getNome());
+    txtCpf.setText(usuario.getCpf());
+    txtEmail.setText(usuario.getEmail());
+    txtLogin.setText(usuario.getLogin());
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -52,6 +67,7 @@ public class TelaEditarUsuario extends javax.swing.JFrame {
         txtCpf.addActionListener(this::txtCpfActionPerformed);
 
         btnSalvar.setText("Salvar");
+        btnSalvar.addActionListener(this::btnSalvarActionPerformed);
 
         btnCancelar.setText("Cancelar");
         btnCancelar.addActionListener(this::btnCancelarActionPerformed);
@@ -120,30 +136,37 @@ public class TelaEditarUsuario extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCpfActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        // TODO add your handling code here:
+        
+        String nome = txtNome.getText();
+        String email = txtEmail.getText();
+        String login = txtLogin.getText();
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new TelaEditarUsuario().setVisible(true));
-    }
+if (!ValidadorUsuario.camposPreenchidos(nome, email, login)) {
+    javax.swing.JOptionPane.showMessageDialog(this, "Preencha todos os campos.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+    return;
+}
+
+    usuario.setNome(nome);
+    usuario.setEmail(email);
+    usuario.setLogin(login);
+
+try {
+        repositorio.atualizar(usuario);
+        javax.swing.JOptionPane.showMessageDialog(this, "Usuário atualizado com sucesso!", "Sucesso", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+    this.dispose();
+} catch (LoginDuplicadoException e) {
+        javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Login já existe", javax.swing.JOptionPane.WARNING_MESSAGE);
+} catch (UsuarioNaoEncontradoException e) {
+        javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Usuário não encontrado", javax.swing.JOptionPane.WARNING_MESSAGE);
+        this.dispose();
+} catch (RuntimeException e) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Não foi possível atualizar: " + e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+}
+    listagem.recarregar();
+    }//GEN-LAST:event_btnSalvarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;

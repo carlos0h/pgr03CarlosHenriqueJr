@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
+import br.com.ifba.usuario.exception.UsuarioNaoEncontradoException;
+import br.com.ifba.usuario.exception.LoginDuplicadoException;
 
 public class RepositorioUsuarioEmMemoria {
     
@@ -13,9 +15,10 @@ public class RepositorioUsuarioEmMemoria {
     private final Map<String, Usuario> porLogin = new HashMap<>();
     // map(guarda pares de chaves) e list(guarda itens numa sequencia)
     public void cadastrar(Usuario usuario){
-        if (porLogin.containsKey(usuario.getLogin())) {
-            throw new IllegalArgumentException("Já existe um usuário cadastrado com esse login.");
-        }
+        
+       if (porLogin.containsKey(usuario.getLogin())) {
+       throw new LoginDuplicadoException(usuario.getLogin());
+}
         usuarios.add(usuario);
         porLogin.put(usuario.getLogin(), usuario);
     }
@@ -24,8 +27,12 @@ public class RepositorioUsuarioEmMemoria {
         return usuarios;
     }
     
-    public Usuario buscaPorLogin(String login){
-        return porLogin.get(login);
+    public Usuario buscarPorLogin(String login) {
+    Usuario usuario = porLogin.get(login);
+    if (usuario == null) {
+        throw new UsuarioNaoEncontradoException(login);
+    }
+    return usuario;
     }
     
 }
