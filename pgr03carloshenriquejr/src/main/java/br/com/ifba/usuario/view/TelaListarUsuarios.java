@@ -3,7 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package br.com.ifba.usuario.view;
-
+import br.com.ifba.usuario.entity.Usuario;
+import br.com.ifba.usuario.exception.UsuarioNaoEncontradoException;
+import br.com.ifba.usuario.repositorio.RepositorioUsuarioJpa;
 /**
  *
  * @author carlos
@@ -17,8 +19,29 @@ public class TelaListarUsuarios extends javax.swing.JFrame {
      */
     public TelaListarUsuarios() {
         initComponents();
+        recarregar();
     }
+    private final RepositorioUsuarioJpa repositorio = new RepositorioUsuarioJpa();
+    private java.util.List<Usuario> usuariosExibidos = new java.util.ArrayList<>();
 
+    // preenche a tabela e guarda a lista na mesma ordem das linhas
+    private void carregarTabela(java.util.List<Usuario> usuarios) {
+    usuariosExibidos = usuarios;
+    javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) tblUsuarios.getModel();
+    modelo.setRowCount(0);
+    for (Usuario u : usuarios) {
+        modelo.addRow(new Object[]{u.getNome(), u.getCpf(), u.getEmail(), u.getLogin()});
+    }
+}
+
+    // recarrega todos os usuarios do banco, avisando se der erro
+    public void recarregar() {
+    try {
+        carregarTabela(repositorio.listarTodos());
+    } catch (RuntimeException e) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Não foi possível carregar os usuários: " + e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+    }
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,14 +51,14 @@ public class TelaListarUsuarios extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTextField1 = new javax.swing.JTextField();
+        txtBuscar = new javax.swing.JTextField();
         btnNovo = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblUsuarios = new javax.swing.JTable();
         jScrollBar1 = new javax.swing.JScrollBar();
         btnEditar = new javax.swing.JButton();
         btnRemover = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
 
@@ -71,8 +94,8 @@ public class TelaListarUsuarios extends javax.swing.JFrame {
         btnRemover.setText("Remover");
         btnRemover.addActionListener(this::btnRemoverActionPerformed);
 
-        jButton4.setText("🔎");
-        jButton4.addActionListener(this::jButton4ActionPerformed);
+        btnBuscar.setText("🔎");
+        btnBuscar.addActionListener(this::btnBuscarActionPerformed);
 
         jLabel1.setText("jLabel1");
 
@@ -96,9 +119,9 @@ public class TelaListarUsuarios extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton4)
+                                .addComponent(btnBuscar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField1))
+                                .addComponent(txtBuscar))
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 609, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -111,9 +134,9 @@ public class TelaListarUsuarios extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnNovo)
-                    .addComponent(jButton4))
+                    .addComponent(btnBuscar))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
@@ -130,21 +153,52 @@ public class TelaListarUsuarios extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-    new TelaEditarUsuario().setVisible(true);
+    int linha = tblUsuarios.getSelectedRow();
+    if (linha < 0) {
+    javax.swing.JOptionPane.showMessageDialog(this, "Selecione um usuário na tabela.", "Atenção", javax.swing.JOptionPane.WARNING_MESSAGE);
+    return;
+}
+    new TelaEditarUsuario(usuariosExibidos.get(linha), this).setVisible(true);
     }//GEN-LAST:event_btnEditarActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+        String texto = txtBuscar.getText().trim();
+    if (texto.isEmpty()) {
+    recarregar();
+    return;
+}
+    try {
+    carregarTabela(repositorio.buscarPorNome(texto));
+    } catch (RuntimeException e) {
+    javax.swing.JOptionPane.showMessageDialog(this, "Não foi possível buscar: " + e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+    }
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
-        new TelaCadastroUsuario().setVisible(true);
+        new TelaCadastroUsuario(this).setVisible(true);
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
-    int resposta = javax.swing.JOptionPane.showConfirmDialog(this, "Deseja excluir o usuário?", "Confirmar exclusão", javax.swing.JOptionPane.YES_NO_OPTION);
-    if (resposta == javax.swing.JOptionPane.YES_OPTION) {
-   
+    int linha = tblUsuarios.getSelectedRow();
+if (linha < 0) {
+    javax.swing.JOptionPane.showMessageDialog(this, "Selecione um usuário na tabela.", "Atenção", javax.swing.JOptionPane.WARNING_MESSAGE);
+    return;
+}
+Usuario selecionado = usuariosExibidos.get(linha);
+
+int resposta = javax.swing.JOptionPane.showConfirmDialog(this,
+        "Deseja excluir o usuário " + selecionado.getNome() + "?",
+        "Confirmar exclusão", javax.swing.JOptionPane.YES_NO_OPTION);
+if (resposta == javax.swing.JOptionPane.YES_OPTION) {
+    try {
+        repositorio.remover(selecionado.getId());
+    } catch (UsuarioNaoEncontradoException e) {
+        javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Usuário não encontrado", javax.swing.JOptionPane.WARNING_MESSAGE);
+    } catch (RuntimeException e) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Não foi possível excluir: " + e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+    }
+    recarregar();
 }
     }//GEN-LAST:event_btnRemoverActionPerformed
 
@@ -178,15 +232,15 @@ public class TelaListarUsuarios extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnRemover;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollBar jScrollBar1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTable tblUsuarios;
+    private javax.swing.JTextField txtBuscar;
     // End of variables declaration//GEN-END:variables
 }

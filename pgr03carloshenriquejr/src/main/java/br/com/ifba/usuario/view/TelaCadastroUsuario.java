@@ -1,11 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package br.com.ifba.usuario.view;
 import br.com.ifba.usuario.entity.Usuario;
-import br.com.ifba.usuario.repositorio.RepositorioUsuarioEmMemoria;
-
+import br.com.ifba.usuario.exception.LoginDuplicadoException;
+import br.com.ifba.usuario.repositorio.RepositorioUsuarioJpa;
 /**
  *
  * @author carlos
@@ -13,13 +10,19 @@ import br.com.ifba.usuario.repositorio.RepositorioUsuarioEmMemoria;
 public class TelaCadastroUsuario extends javax.swing.JFrame {
     
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TelaCadastroUsuario.class.getName());
-    private final RepositorioUsuarioEmMemoria repositorio = new RepositorioUsuarioEmMemoria();
-    /**
-     * Creates new form TelaCadastroUsuario
-     */
+   private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TelaCadastroUsuario.class.getName());
+    private final RepositorioUsuarioJpa repositorio = new RepositorioUsuarioJpa();
+    private TelaListarUsuarios listagem; // fica null quando aberta pela tela de login
+
+    // usado pela tela de login
     public TelaCadastroUsuario() {
         initComponents();
+    }
+
+    // usado pela listagem, que precisa ser atualizada depois do cadastro
+    public TelaCadastroUsuario(TelaListarUsuarios listagem) {
+        initComponents();
+        this.listagem = listagem;
     }
 
     /**
@@ -127,9 +130,10 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_txtSenhaActionPerformed
 
     private void BtnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCancelarActionPerformed
-        this.dispose();
-        new br.com.ifba.login.view.Login().setVisible(true); //vai voltar tela de login
-        
+       this.dispose();
+    if (listagem == null) {
+    new br.com.ifba.login.view.Login().setVisible(true);
+    }
     }//GEN-LAST:event_BtnCancelarActionPerformed
 
     private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
@@ -148,9 +152,9 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
         char[] confirmarSenhaChar = txtConfSenha.getPassword();
         String senha = new String(senhaChar);
         String confirmarSenha = new String(confirmarSenhaChar);
-       
+        String login = txtLogin.getText();
         
-       if (!br.com.ifba.usuario.validar.ValidadorUsuario.camposPreenchidos(nome, cpf, email, senha, confirmarSenha)) {
+       if (!br.com.ifba.usuario.validar.ValidadorUsuario.camposPreenchidos(nome, cpf, email,login, senha, confirmarSenha)) {
     javax.swing.JOptionPane.showMessageDialog(this, "Preencha todos os campos.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
 } else if (!senha.equals(confirmarSenha)) {
     javax.swing.JOptionPane.showMessageDialog(this, "As senhas não coincidem.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
@@ -162,20 +166,26 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
     || br.com.ifba.usuario.validar.ValidadorUsuario.palavraProibida(senha)) {
     javax.swing.JOptionPane.showMessageDialog(this, "Login contém palavra não permitida.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
 } else {
-        
-        Usuario usuario = new Usuario(txtNomeComp.getText(), txtCpf.getText(), txtLogin.getText(), senha);
-        usuario.setEmail(txtEmail.getText());
-        
-        try {
-            repositorio.cadastrar(usuario);
-            javax.swing.JOptionPane.showMessageDialog(this, "Usuário " + usuario.getNome() + " cadastrado com sucesso!", "Sucesso", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-        } catch (IllegalArgumentException e) {
-            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+
+    Usuario usuario = new Usuario(nome, cpf, login, senha);
+    usuario.setEmail(email);
+
+  try {
+    repositorio.cadastrar(usuario);
+    javax.swing.JOptionPane.showMessageDialog(this, "Usuário " + usuario.getNome() + " cadastrado com sucesso!", "Sucesso", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        if (listagem != null) {
+            listagem.recarregar();
         }
-         
+        
+} catch (LoginDuplicadoException e) {
+         javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Login já existe", javax.swing.JOptionPane.WARNING_MESSAGE);
+    } catch (RuntimeException e) {
+        logger.log(java.util.logging.Level.SEVERE, "Erro ao cadastrar usuário", e);
+        javax.swing.JOptionPane.showMessageDialog(this, "Não foi possível cadastrar. Verifique a conexão com o banco e tente novamente.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+    }
     }
     }//GEN-LAST:event_btnCadastrarActionPerformed
-
+    
     private void txtLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLoginActionPerformed
         // TODO add your handling code here:
         
