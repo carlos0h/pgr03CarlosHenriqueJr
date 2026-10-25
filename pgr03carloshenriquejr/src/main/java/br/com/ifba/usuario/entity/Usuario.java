@@ -31,6 +31,10 @@ public class Usuario implements Autenticavel{
     @Column(nullable = false)
     private String senha;
     
+    // preenchida pelo proprio banco (DEFAULT CURRENT_TIMESTAMP da V2), por isso nao entra no INSERT
+    @Column(name = "data_cadastro", insertable = false, updatable = false)
+    private java.time.LocalDateTime dataCadastro;
+    
     public Usuario(){
     }
     
@@ -43,6 +47,9 @@ public class Usuario implements Autenticavel{
     
     public Long getId() {
         return id;
+    }
+    public java.time.LocalDateTime getDataCadastro() {
+        return dataCadastro;
     }
 
     public String getNome() {
