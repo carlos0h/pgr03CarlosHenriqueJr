@@ -6,10 +6,10 @@
         <class>br.com.ifba.usuario.entity.Usuario</class>
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/"/>
-            <property name="jakarta.persistence.jdbc.user" value=""/>
-            <property name="jakarta.persistence.jdbc.password" value=""/>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/matchrh"/>
+            <property name="jakarta.persistence.jdbc.user" value="matchrh_user"/>
+            <property name="jakarta.persistence.jdbc.password" value="esquilo"/>
+            <property name="hibernate.hbm2ddl.auto" value="validate"/>
             <property name="hibernate.show_sql" value="true"/>
         </properties>
     </persistence-unit>

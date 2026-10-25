@@ -210,8 +210,23 @@ public class Login extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
+                //</editor-fold>
+
+        // sobe o banco e aplica as migrations antes de abrir qualquer tela
+        try {
+            br.com.ifba.infrastructure.util.JPAUtil.iniciar();
+        } catch (RuntimeException e) {
+            logger.log(java.util.logging.Level.SEVERE, "Erro ao iniciar o banco", e);
+            javax.swing.JOptionPane.showMessageDialog(null, "Não foi possível iniciar o banco de dados. Verifique a conexão e as migrations.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new Login().setVisible(true));
     }
+        
+        
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEntrar;
