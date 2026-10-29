@@ -5,8 +5,9 @@
 package br.com.ifba.usuario.view;
 import br.com.ifba.usuario.entity.Usuario;
 import br.com.ifba.usuario.exception.LoginDuplicadoException;
-import br.com.ifba.usuario.exception.UsuarioNaoEncontradoException;
-import br.com.ifba.usuario.repositorio.RepositorioUsuarioJpa;
+import br.com.ifba.infrastructure.exception.FalhaPersistenciaException;
+import br.com.ifba.usuario.dao.UsuarioDao;
+import br.com.ifba.usuario.dao.UsuarioIDao;
 import br.com.ifba.usuario.validar.ValidadorUsuario;
 /**
  *
@@ -19,9 +20,9 @@ public class TelaEditarUsuario extends javax.swing.JFrame {
     /**
      * Creates new form TelaEditarUsuario
      */
-   private final RepositorioUsuarioJpa repositorio = new RepositorioUsuarioJpa();
-private final Usuario usuario;
-private final TelaListarUsuarios listagem;
+    private final UsuarioIDao dao = new UsuarioDao();
+    private final Usuario usuario;
+    private final TelaListarUsuarios listagem;
 
 public TelaEditarUsuario(Usuario usuario, TelaListarUsuarios listagem) {
     initComponents();
@@ -153,18 +154,16 @@ if (!ValidadorUsuario.camposPreenchidos(nome, email, login)) {
     usuario.setLogin(login);
 
 try {
-        repositorio.atualizar(usuario);
-        javax.swing.JOptionPane.showMessageDialog(this, "Usuário atualizado com sucesso!", "Sucesso", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+    dao.update(usuario);
+    javax.swing.JOptionPane.showMessageDialog(this, "Usuário atualizado com sucesso!", "Sucesso", javax.swing.JOptionPane.INFORMATION_MESSAGE);
     this.dispose();
 } catch (LoginDuplicadoException e) {
-        javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Login já existe", javax.swing.JOptionPane.WARNING_MESSAGE);
-} catch (UsuarioNaoEncontradoException e) {
-        javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Usuário não encontrado", javax.swing.JOptionPane.WARNING_MESSAGE);
-        this.dispose();
-} catch (RuntimeException e) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Não foi possível atualizar: " + e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+    javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Login já existe", javax.swing.JOptionPane.WARNING_MESSAGE);
+} catch (FalhaPersistenciaException e) {
+    logger.log(java.util.logging.Level.SEVERE, "Erro ao atualizar usuário", e);
+    javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
 }
-    listagem.recarregar();
+listagem.recarregar();
     }//GEN-LAST:event_btnSalvarActionPerformed
 
 
