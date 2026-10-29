@@ -2,7 +2,9 @@
 package br.com.ifba.usuario.view;
 import br.com.ifba.usuario.entity.Usuario;
 import br.com.ifba.usuario.exception.LoginDuplicadoException;
-import br.com.ifba.usuario.repositorio.RepositorioUsuarioJpa;
+import br.com.ifba.infrastructure.exception.FalhaPersistenciaException;
+import br.com.ifba.usuario.dao.UsuarioDao;
+import br.com.ifba.usuario.dao.UsuarioIDao;
 /**
  *
  * @author carlos
@@ -11,8 +13,8 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
     
     
    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TelaCadastroUsuario.class.getName());
-    private final RepositorioUsuarioJpa repositorio = new RepositorioUsuarioJpa();
-    private TelaListarUsuarios listagem; // fica null quando aberta pela tela de login
+   private final UsuarioIDao dao = new UsuarioDao();
+   private TelaListarUsuarios listagem; // fica null quando aberta pela tela de login
 
     // usado pela tela de login
     public TelaCadastroUsuario() {
@@ -171,18 +173,19 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
     usuario.setEmail(email);
 
   try {
-    repositorio.cadastrar(usuario);
+    dao.save(usuario);
     javax.swing.JOptionPane.showMessageDialog(this, "Usuário " + usuario.getNome() + " cadastrado com sucesso!", "Sucesso", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-        if (listagem != null) {
-            listagem.recarregar();
-        }
-        
-} catch (LoginDuplicadoException e) {
-         javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Login já existe", javax.swing.JOptionPane.WARNING_MESSAGE);
-    } catch (RuntimeException e) {
-        logger.log(java.util.logging.Level.SEVERE, "Erro ao cadastrar usuário", e);
-        javax.swing.JOptionPane.showMessageDialog(this, "Não foi possível cadastrar. Verifique a conexão com o banco e tente novamente.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+    if (listagem != null) {
+        listagem.recarregar();
     }
+    
+    } catch (LoginDuplicadoException e) {
+    javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Login já existe", javax.swing.JOptionPane.WARNING_MESSAGE);
+    
+    } catch (FalhaPersistenciaException e) {
+    logger.log(java.util.logging.Level.SEVERE, "Erro ao cadastrar usuário", e);
+    javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+}
     }
     }//GEN-LAST:event_btnCadastrarActionPerformed
     

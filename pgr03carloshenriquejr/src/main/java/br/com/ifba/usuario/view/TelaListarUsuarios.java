@@ -4,12 +4,11 @@
  */
 package br.com.ifba.usuario.view;
 import br.com.ifba.usuario.entity.Usuario;
-import br.com.ifba.usuario.exception.UsuarioNaoEncontradoException;
-import br.com.ifba.usuario.repositorio.RepositorioUsuarioJpa;
-/**
- *
- * @author carlos
- */
+import br.com.ifba.infrastructure.exception.FalhaPersistenciaException;
+import br.com.ifba.usuario.dao.UsuarioDao;
+import br.com.ifba.usuario.dao.UsuarioIDao;
+
+
 public class TelaListarUsuarios extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TelaListarUsuarios.class.getName());
@@ -21,7 +20,7 @@ public class TelaListarUsuarios extends javax.swing.JFrame {
         initComponents();
         recarregar();
     }
-    private final RepositorioUsuarioJpa repositorio = new RepositorioUsuarioJpa();
+    private final UsuarioIDao dao = new UsuarioDao();
     private java.util.List<Usuario> usuariosExibidos = new java.util.ArrayList<>();
 
     // preenche a tabela e guarda a lista na mesma ordem das linhas
@@ -35,11 +34,11 @@ public class TelaListarUsuarios extends javax.swing.JFrame {
 }
 
     // recarrega todos os usuarios do banco, avisando se der erro
-    public void recarregar() {
+   public void recarregar() {
     try {
-        carregarTabela(repositorio.listarTodos());
-    } catch (RuntimeException e) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Não foi possível carregar os usuários: " + e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+        carregarTabela(dao.findAll());
+    } catch (FalhaPersistenciaException e) {
+        javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
     }
 }
     /**
@@ -169,9 +168,9 @@ public class TelaListarUsuarios extends javax.swing.JFrame {
     return;
 }
     try {
-    carregarTabela(repositorio.buscarPorNome(texto));
-    } catch (RuntimeException e) {
-    javax.swing.JOptionPane.showMessageDialog(this, "Não foi possível buscar: " + e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+    carregarTabela(dao.findByNome(texto));
+    } catch (FalhaPersistenciaException e) {
+        javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
     }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
@@ -192,11 +191,9 @@ int resposta = javax.swing.JOptionPane.showConfirmDialog(this,
         "Confirmar exclusão", javax.swing.JOptionPane.YES_NO_OPTION);
 if (resposta == javax.swing.JOptionPane.YES_OPTION) {
     try {
-        repositorio.remover(selecionado.getId());
-    } catch (UsuarioNaoEncontradoException e) {
-        javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Usuário não encontrado", javax.swing.JOptionPane.WARNING_MESSAGE);
-    } catch (RuntimeException e) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Não foi possível excluir: " + e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+        dao.delete(selecionado);
+    } catch (FalhaPersistenciaException e) {
+        javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
     }
     recarregar();
 }
