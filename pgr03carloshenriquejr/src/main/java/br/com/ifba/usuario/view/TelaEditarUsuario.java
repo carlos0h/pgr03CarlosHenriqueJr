@@ -1,39 +1,33 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package br.com.ifba.usuario.view;
-import br.com.ifba.usuario.entity.Usuario;
-import br.com.ifba.usuario.exception.LoginDuplicadoException;
+
 import br.com.ifba.infrastructure.exception.FalhaPersistenciaException;
-import br.com.ifba.usuario.dao.UsuarioDao;
-import br.com.ifba.usuario.dao.UsuarioIDao;
-import br.com.ifba.usuario.validar.ValidadorUsuario;
+import br.com.ifba.usuario.controller.UsuarioIController;
+import br.com.ifba.usuario.entity.Usuario;
+import br.com.ifba.usuario.exception.DadosInvalidosException;
+import br.com.ifba.usuario.exception.LoginDuplicadoException;
 /**
  *
  * @author carlos
  */
 public class TelaEditarUsuario extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TelaEditarUsuario.class.getName());
 
-    /**
-     * Creates new form TelaEditarUsuario
-     */
-    private final UsuarioIDao dao = new UsuarioDao();
+    private final UsuarioIController controller;
     private final Usuario usuario;
     private final TelaListarUsuarios listagem;
 
-public TelaEditarUsuario(Usuario usuario, TelaListarUsuarios listagem) {
-    initComponents();
-    this.usuario = usuario;
-    this.listagem = listagem;
-    // preenche os campos com os dados do usuario escolhido
-    txtNome.setText(usuario.getNome());
-    txtCpf.setText(usuario.getCpf());
-    txtEmail.setText(usuario.getEmail());
-    txtLogin.setText(usuario.getLogin());
-}
+    public TelaEditarUsuario(Usuario usuario, UsuarioIController controller, TelaListarUsuarios listagem) {
+        initComponents();
+        this.usuario = usuario;
+        this.controller = controller;
+        this.listagem = listagem;
+        // preenche os campos com os dados do usuario escolhido
+        txtNome.setText(usuario.getNome());
+        txtCpf.setText(usuario.getCpf());
+        txtEmail.setText(usuario.getEmail());
+        txtLogin.setText(usuario.getLogin());
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -138,32 +132,20 @@ public TelaEditarUsuario(Usuario usuario, TelaListarUsuarios listagem) {
     }//GEN-LAST:event_txtCpfActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        // TODO add your handling code here:
-        
-        String nome = txtNome.getText();
-        String email = txtEmail.getText();
-        String login = txtLogin.getText();
-
-if (!ValidadorUsuario.camposPreenchidos(nome, email, login)) {
-    javax.swing.JOptionPane.showMessageDialog(this, "Preencha todos os campos.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
-    return;
-}
-
-    usuario.setNome(nome);
-    usuario.setEmail(email);
-    usuario.setLogin(login);
-
-try {
-    dao.update(usuario);
-    javax.swing.JOptionPane.showMessageDialog(this, "Usuário atualizado com sucesso!", "Sucesso", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-    this.dispose();
-} catch (LoginDuplicadoException e) {
-    javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Login já existe", javax.swing.JOptionPane.WARNING_MESSAGE);
-} catch (FalhaPersistenciaException e) {
-    logger.log(java.util.logging.Level.SEVERE, "Erro ao atualizar usuário", e);
-    javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
-}
-listagem.recarregar();
+                                                  
+        try {
+            controller.atualizar(usuario, txtNome.getText(), txtEmail.getText(), txtLogin.getText());
+            javax.swing.JOptionPane.showMessageDialog(this, "Usuário atualizado com sucesso!", "Sucesso", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            this.dispose();
+        } catch (DadosInvalidosException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Dados inválidos", javax.swing.JOptionPane.WARNING_MESSAGE);
+        } catch (LoginDuplicadoException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Login já existe", javax.swing.JOptionPane.WARNING_MESSAGE);
+        } catch (FalhaPersistenciaException e) {
+            logger.log(java.util.logging.Level.SEVERE, "Erro ao atualizar usuário", e);
+            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+        listagem.recarregar();
     }//GEN-LAST:event_btnSalvarActionPerformed
 
 

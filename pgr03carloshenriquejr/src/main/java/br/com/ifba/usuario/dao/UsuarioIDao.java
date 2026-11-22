@@ -12,4 +12,7 @@ public interface UsuarioIDao extends GenericIDao<Usuario> {
 
     // usuarios cujo nome contem o texto, sem diferenciar maiuscula de minuscula
     List<Usuario> findByNome(String texto);
+    
+        // true se ja existe usuario com esse login; idIgnorado (pode ser null) evita a edicao se contar a si mesma
+    boolean loginEmUso(String login, Long idIgnorado);
 }

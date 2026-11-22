@@ -4,6 +4,7 @@
  */
 package br.com.ifba.login.view;
 import br.com.ifba.usuario.entity.Usuario;
+import br.com.ifba.usuario.controller.UsuarioIController;
 /**
  *
  * @author carlos
@@ -15,7 +16,10 @@ public class Login extends javax.swing.JFrame {
     /**
      * Creates new form Login
      */
-    public Login() {
+       private final UsuarioIController controller;
+
+    public Login(UsuarioIController controller) {
+        this.controller = controller;
         initComponents();
     }
 
@@ -164,6 +168,8 @@ public class Login extends javax.swing.JFrame {
    
    if(acessoLiberado){
        javax.swing.JOptionPane.showMessageDialog(this, "Acesso liberado!", "Sucesso", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+       new br.com.ifba.usuario.view.TelaListarUsuarios(controller).setVisible(true);
+       this.dispose();
     } else {
         javax.swing.JOptionPane.showMessageDialog(this, "Login ou senha incorretos.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
     }
@@ -184,49 +190,10 @@ public class Login extends javax.swing.JFrame {
 
     private void txtCadastrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtCadastrarMouseClicked
         // TODO add your handling code here:
-        new br.com.ifba.usuario.view.TelaCadastroUsuario().setVisible(true);
+        new br.com.ifba.usuario.view.TelaCadastroUsuario(controller).setVisible(true);
         this.dispose();// vai fechar a tela de login
     }//GEN-LAST:event_txtCadastrarMouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-                //</editor-fold>
-
-        // sobe o banco e aplica as migrations antes de abrir qualquer tela
-        try {
-            br.com.ifba.infrastructure.util.JPAUtil.iniciar();
-        } catch (RuntimeException e) {
-            logger.log(java.util.logging.Level.SEVERE, "Erro ao iniciar o banco", e);
-            javax.swing.JOptionPane.showMessageDialog(null, "Não foi possível iniciar o banco de dados. Verifique a conexão e as migrations.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new Login().setVisible(true));
-    }
-        
-        
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEntrar;

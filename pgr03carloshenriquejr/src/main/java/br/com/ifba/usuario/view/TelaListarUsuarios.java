@@ -1,46 +1,40 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package br.com.ifba.usuario.view;
-import br.com.ifba.usuario.entity.Usuario;
-import br.com.ifba.infrastructure.exception.FalhaPersistenciaException;
-import br.com.ifba.usuario.dao.UsuarioDao;
-import br.com.ifba.usuario.dao.UsuarioIDao;
 
+import br.com.ifba.infrastructure.exception.FalhaPersistenciaException;
+import br.com.ifba.usuario.controller.UsuarioIController;
+import br.com.ifba.usuario.entity.Usuario;
 
 public class TelaListarUsuarios extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TelaListarUsuarios.class.getName());
 
-    /**
-     * Creates new form TelaListarUsuarios
-     */
-    public TelaListarUsuarios() {
-        initComponents();
-        recarregar();
-    }
-    private final UsuarioIDao dao = new UsuarioDao();
+    private final UsuarioIController controller;
     private java.util.List<Usuario> usuariosExibidos = new java.util.ArrayList<>();
 
-    // preenche a tabela e guarda a lista na mesma ordem das linhas
+    public TelaListarUsuarios(UsuarioIController controller) {
+        initComponents();
+        this.controller = controller;
+        recarregar();
+    }
+   
+     // preenche a tabela e guarda a lista na mesma ordem das linhas
     private void carregarTabela(java.util.List<Usuario> usuarios) {
-    usuariosExibidos = usuarios;
-    javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) tblUsuarios.getModel();
-    modelo.setRowCount(0);
-    for (Usuario u : usuarios) {
-        modelo.addRow(new Object[]{u.getNome(), u.getCpf(), u.getEmail(), u.getLogin()});
+        usuariosExibidos = usuarios;
+        javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) tblUsuarios.getModel();
+        modelo.setRowCount(0);
+        for (Usuario u : usuarios) {
+            modelo.addRow(new Object[]{u.getNome(), u.getCpf(), u.getEmail(), u.getLogin()});
+        }
     }
-}
 
-    // recarrega todos os usuarios do banco, avisando se der erro
-   public void recarregar() {
-    try {
-        carregarTabela(dao.findAll());
-    } catch (FalhaPersistenciaException e) {
-        javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+    // recarrega todos os usuarios, avisando se der erro
+    public void recarregar() {
+        try {
+            carregarTabela(controller.listar());
+        } catch (FalhaPersistenciaException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
     }
-}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -157,76 +151,49 @@ public class TelaListarUsuarios extends javax.swing.JFrame {
     javax.swing.JOptionPane.showMessageDialog(this, "Selecione um usuário na tabela.", "Atenção", javax.swing.JOptionPane.WARNING_MESSAGE);
     return;
 }
-    new TelaEditarUsuario(usuariosExibidos.get(linha), this).setVisible(true);
+        new TelaEditarUsuario(usuariosExibidos.get(linha), controller, this).setVisible(true);
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // TODO add your handling code here:
-        String texto = txtBuscar.getText().trim();
-    if (texto.isEmpty()) {
-    recarregar();
-    return;
-}
-    try {
-    carregarTabela(dao.findByNome(texto));
-    } catch (FalhaPersistenciaException e) {
-        javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
-    }
+
+         try {
+            carregarTabela(controller.buscarPorNome(txtBuscar.getText()));
+        } catch (FalhaPersistenciaException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
-        new TelaCadastroUsuario(this).setVisible(true);
+                new TelaCadastroUsuario(controller, this).setVisible(true);
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
-    int linha = tblUsuarios.getSelectedRow();
-if (linha < 0) {
-    javax.swing.JOptionPane.showMessageDialog(this, "Selecione um usuário na tabela.", "Atenção", javax.swing.JOptionPane.WARNING_MESSAGE);
-    return;
-}
-Usuario selecionado = usuariosExibidos.get(linha);
+        int linha = tblUsuarios.getSelectedRow();
+        if (linha < 0) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Selecione um usuário na tabela.", "Atenção", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        Usuario selecionado = usuariosExibidos.get(linha);
 
-int resposta = javax.swing.JOptionPane.showConfirmDialog(this,
-        "Deseja excluir o usuário " + selecionado.getNome() + "?",
-        "Confirmar exclusão", javax.swing.JOptionPane.YES_NO_OPTION);
-if (resposta == javax.swing.JOptionPane.YES_OPTION) {
-    try {
-        dao.delete(selecionado);
-    } catch (FalhaPersistenciaException e) {
-        javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
-    }
-    recarregar();
-}
+        int resposta = javax.swing.JOptionPane.showConfirmDialog(this,
+                "Deseja excluir o usuário " + selecionado.getNome() + "?",
+                "Confirmar exclusão", javax.swing.JOptionPane.YES_NO_OPTION);
+        if (resposta == javax.swing.JOptionPane.YES_OPTION) {
+            try {
+                controller.excluir(selecionado);
+            } catch (FalhaPersistenciaException e) {
+                javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
+            recarregar();
+        }
     }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
      this.dispose(); // só pra fechar a tela
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new TelaListarUsuarios().setVisible(true));
-    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
