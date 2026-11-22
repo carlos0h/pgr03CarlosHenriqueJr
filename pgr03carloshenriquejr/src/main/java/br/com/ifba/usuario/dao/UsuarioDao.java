@@ -3,14 +3,13 @@ package br.com.ifba.usuario.dao;
 import br.com.ifba.infrastructure.dao.GenericDao;
 import br.com.ifba.infrastructure.exception.FalhaPersistenciaException;
 import br.com.ifba.usuario.entity.Usuario;
-import br.com.ifba.usuario.exception.LoginDuplicadoException;
 import br.com.ifba.usuario.exception.UsuarioNaoEncontradoException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
 import java.util.function.Supplier;
 
-// DAO de usuario: herda o CRUD do GenericDao e acrescenta as regras e buscas do dominio
+// DAO de usuario: herda o CRUD do GenericDao e acrescenta as buscas do dominio
 public class UsuarioDao extends GenericDao<Usuario> implements UsuarioIDao {
 
     public UsuarioDao() {
@@ -20,24 +19,6 @@ public class UsuarioDao extends GenericDao<Usuario> implements UsuarioIDao {
     // usado nos testes, que trocam a origem do EntityManager
     public UsuarioDao(Supplier<EntityManager> fabrica) {
         super(Usuario.class, fabrica);
-    }
-
-    // regra do dominio: nao pode haver dois usuarios com o mesmo login
-    @Override
-    public void save(Usuario usuario) {
-        if (loginEmUso(usuario.getLogin(), null)) {
-            throw new LoginDuplicadoException(usuario.getLogin());
-        }
-        super.save(usuario);
-    }
-
-    // na edicao, o login so conta como repetido se for de OUTRO usuario
-    @Override
-    public Usuario update(Usuario usuario) {
-        if (loginEmUso(usuario.getLogin(), usuario.getId())) {
-            throw new LoginDuplicadoException(usuario.getLogin());
-        }
-        return super.update(usuario);
     }
 
     @Override
@@ -75,7 +56,8 @@ public class UsuarioDao extends GenericDao<Usuario> implements UsuarioIDao {
     }
 
     // confere se o login ja existe; idIgnorado serve para a edicao nao se contar a si mesma
-    private boolean loginEmUso(String login, Long idIgnorado) {
+    @Override
+    public boolean loginEmUso(String login, Long idIgnorado) {
         EntityManager em = abrir();
         try {
             String jpql = "select count(u) from Usuario u where u.login = :login";

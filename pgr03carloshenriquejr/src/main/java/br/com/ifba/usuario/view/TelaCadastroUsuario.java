@@ -1,32 +1,32 @@
-
 package br.com.ifba.usuario.view;
-import br.com.ifba.usuario.entity.Usuario;
-import br.com.ifba.usuario.exception.LoginDuplicadoException;
+
 import br.com.ifba.infrastructure.exception.FalhaPersistenciaException;
-import br.com.ifba.usuario.dao.UsuarioDao;
-import br.com.ifba.usuario.dao.UsuarioIDao;
+import br.com.ifba.usuario.controller.UsuarioIController;
+import br.com.ifba.usuario.exception.DadosInvalidosException;
+import br.com.ifba.usuario.exception.LoginDuplicadoException;
+
 /**
  *
  * @author carlos
  */
 public class TelaCadastroUsuario extends javax.swing.JFrame {
-    
-    
-   private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TelaCadastroUsuario.class.getName());
-   private final UsuarioIDao dao = new UsuarioDao();
-   private TelaListarUsuarios listagem; // fica null quando aberta pela tela de login
+
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TelaCadastroUsuario.class.getName());
+
+    private final UsuarioIController controller;
+    private final TelaListarUsuarios listagem; // fica null quando aberta pela tela de login
 
     // usado pela tela de login
-    public TelaCadastroUsuario() {
-        initComponents();
+    public TelaCadastroUsuario(UsuarioIController controller) {
+        this(controller, null);
     }
 
     // usado pela listagem, que precisa ser atualizada depois do cadastro
-    public TelaCadastroUsuario(TelaListarUsuarios listagem) {
+    public TelaCadastroUsuario(UsuarioIController controller, TelaListarUsuarios listagem) {
         initComponents();
+        this.controller = controller;
         this.listagem = listagem;
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -132,10 +132,10 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_txtSenhaActionPerformed
 
     private void BtnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCancelarActionPerformed
-       this.dispose();
-    if (listagem == null) {
-    new br.com.ifba.login.view.Login().setVisible(true);
-    }
+               this.dispose();
+        if (listagem == null) {
+            new br.com.ifba.login.view.Login(controller).setVisible(true); //volta pra tela de login
+        }
     }//GEN-LAST:event_BtnCancelarActionPerformed
 
     private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
@@ -147,46 +147,35 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_txtNomeCompActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
+                                        
         String nome = txtNomeComp.getText();
         String cpf = txtCpf.getText();
         String email = txtEmail.getText();
-        char[] senhaChar = txtSenha.getPassword();
-        char[] confirmarSenhaChar = txtConfSenha.getPassword();
-        String senha = new String(senhaChar);
-        String confirmarSenha = new String(confirmarSenhaChar);
         String login = txtLogin.getText();
-        
-       if (!br.com.ifba.usuario.validar.ValidadorUsuario.camposPreenchidos(nome, cpf, email,login, senha, confirmarSenha)) {
-    javax.swing.JOptionPane.showMessageDialog(this, "Preencha todos os campos.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
-} else if (!senha.equals(confirmarSenha)) {
-    javax.swing.JOptionPane.showMessageDialog(this, "As senhas não coincidem.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
-} else if (!br.com.ifba.usuario.validar.ValidadorUsuario.cpfValido(cpf)) {
-    javax.swing.JOptionPane.showMessageDialog(this, "CPF inválido. Digite 11 números.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
-} else if (!br.com.ifba.usuario.validar.ValidadorUsuario.senhaForte(senha)) {
-    javax.swing.JOptionPane.showMessageDialog(this, "Senha muito curta. Mínimo de 6 caracteres.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
-} else if (br.com.ifba.usuario.validar.ValidadorUsuario.palavraProibida(nome) 
-    || br.com.ifba.usuario.validar.ValidadorUsuario.palavraProibida(senha)) {
-    javax.swing.JOptionPane.showMessageDialog(this, "Login contém palavra não permitida.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
-} else {
+        String senha = new String(txtSenha.getPassword());
+        String confirmarSenha = new String(txtConfSenha.getPassword());
 
-    Usuario usuario = new Usuario(nome, cpf, login, senha);
-    usuario.setEmail(email);
+        // regra da tela: o campo "confirmar senha" so existe neste formulario
+        if (!senha.equals(confirmarSenha)) {
+            javax.swing.JOptionPane.showMessageDialog(this, "As senhas não coincidem.", "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-  try {
-    dao.save(usuario);
-    javax.swing.JOptionPane.showMessageDialog(this, "Usuário " + usuario.getNome() + " cadastrado com sucesso!", "Sucesso", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-    if (listagem != null) {
-        listagem.recarregar();
-    }
+        try {
+            controller.cadastrar(nome, cpf, email, login, senha);
+            javax.swing.JOptionPane.showMessageDialog(this, "Usuário " + nome + " cadastrado com sucesso!", "Sucesso", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            if (listagem != null) {
+                listagem.recarregar();
+            }
+        } catch (DadosInvalidosException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Dados inválidos", javax.swing.JOptionPane.WARNING_MESSAGE);
+        } catch (LoginDuplicadoException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Login já existe", javax.swing.JOptionPane.WARNING_MESSAGE);
+        } catch (FalhaPersistenciaException e) {
+            logger.log(java.util.logging.Level.SEVERE, "Erro ao cadastrar usuário", e);
+            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
     
-    } catch (LoginDuplicadoException e) {
-    javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Login já existe", javax.swing.JOptionPane.WARNING_MESSAGE);
-    
-    } catch (FalhaPersistenciaException e) {
-    logger.log(java.util.logging.Level.SEVERE, "Erro ao cadastrar usuário", e);
-    javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
-}
-    }
     }//GEN-LAST:event_btnCadastrarActionPerformed
     
     private void txtLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLoginActionPerformed
@@ -194,30 +183,6 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
         
     }//GEN-LAST:event_txtLoginActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new TelaCadastroUsuario().setVisible(true));
-    }
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
