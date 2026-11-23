@@ -91,20 +91,19 @@ public class Usuario extends PersistenceEntity implements Autenticavel {
     }
     
     
-    
-    // compara login e senha recebidos com os deste usuario
     @Override
     public boolean autenticar(String login, String senha){
         return this.login.equals(login) && this.senha.equals(senha);
     }
     
-    // dois usuarios vao ser iguais se tiverem o msm CPF 
+      // a identidade do usuario e o CPF, e vale para qualquer subtipo:
+    // Candidato e Recrutador entram no lugar de Usuario sem mudar o resultado da comparacao
     @Override
     public boolean equals(Object obj){
         if (this == obj){
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()){
+        if (!(obj instanceof Usuario)){
             return false;
         }
         Usuario outro = (Usuario) obj;

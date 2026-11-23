@@ -10,9 +10,9 @@ package br.com.ifba.usuario.validar;
  */
 public class ValidadorUsuario {
     public static boolean palavraProibida(String texto){
-        String[] palavraP = {"admin", "root", "senha123"};
+        String[] palavrasProibidas = {"admin", "root", "senha123"};
         
-        for (String palavra : palavraP){
+        for (String palavra : palavrasProibidas){
             if(texto.toLowerCase().contains(palavra.toLowerCase())){
                 return true;
             }
