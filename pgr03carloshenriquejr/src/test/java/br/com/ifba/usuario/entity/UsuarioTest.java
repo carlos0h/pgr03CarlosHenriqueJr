@@ -40,5 +40,16 @@ public class UsuarioTest {
     lista.add(u1);
     
     assertTrue(lista.contains(u2));
+    
+    
 }   
+        @Test
+    public void candidatoComMesmoCpfDeUmUsuarioEIgualAEle() {
+        Usuario usuario = new Usuario("Carlos", "12345678901", "carlos", "123456");
+        Candidato candidato = new Candidato("Carlos", "12345678901", "carlos", "123456");
+
+        assertEquals(usuario, candidato);
+        assertEquals(candidato, usuario); // a igualdade tem que valer nos dois sentidos
+        assertEquals(usuario.hashCode(), candidato.hashCode());
+    }
 }   

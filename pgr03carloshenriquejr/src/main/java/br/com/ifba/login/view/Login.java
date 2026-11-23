@@ -44,7 +44,7 @@ public class Login extends javax.swing.JFrame {
         txtSenha = new javax.swing.JPasswordField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        txtCadastrar = new javax.swing.JLabel();
+        lblCadastrar = new javax.swing.JLabel();
 
         jPasswordField1.setText("jPasswordField1");
 
@@ -75,11 +75,11 @@ public class Login extends javax.swing.JFrame {
 
         jLabel5.setText("Não tenho conta");
 
-        txtCadastrar.setForeground(new java.awt.Color(0, 51, 255));
-        txtCadastrar.setText("Cadastrar");
-        txtCadastrar.addMouseListener(new java.awt.event.MouseAdapter() {
+        lblCadastrar.setForeground(new java.awt.Color(0, 51, 255));
+        lblCadastrar.setText("Cadastrar");
+        lblCadastrar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                txtCadastrarMouseClicked(evt);
+                lblCadastrarMouseClicked(evt);
             }
         });
 
@@ -119,7 +119,7 @@ public class Login extends javax.swing.JFrame {
                         .addComponent(jLabel5))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(286, 286, 286)
-                        .addComponent(txtCadastrar)))
+                        .addComponent(lblCadastrar)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -143,7 +143,7 @@ public class Login extends javax.swing.JFrame {
                 .addGap(12, 12, 12)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtCadastrar)
+                .addComponent(lblCadastrar)
                 .addGap(52, 52, 52)
                 .addComponent(btnEntrar)
                 .addGap(124, 124, 124)
@@ -188,11 +188,11 @@ public class Login extends javax.swing.JFrame {
         btnEntrarActionPerformed(evt);
     }//GEN-LAST:event_txtLoginActionPerformed
 
-    private void txtCadastrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtCadastrarMouseClicked
+    private void lblCadastrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCadastrarMouseClicked
         // TODO add your handling code here:
         new br.com.ifba.usuario.view.TelaCadastroUsuario(controller).setVisible(true);
         this.dispose();// vai fechar a tela de login
-    }//GEN-LAST:event_txtCadastrarMouseClicked
+    }//GEN-LAST:event_lblCadastrarMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -205,7 +205,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel txtCadastrar;
+    private javax.swing.JLabel lblCadastrar;
     private javax.swing.JTextArea txtLog;
     private javax.swing.JTextField txtLogin;
     private javax.swing.JPasswordField txtSenha;

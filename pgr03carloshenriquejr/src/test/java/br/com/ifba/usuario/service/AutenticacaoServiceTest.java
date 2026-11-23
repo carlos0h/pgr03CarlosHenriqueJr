@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class AutentificacaoServiceTest {
+public class AutenticacaoServiceTest {
     
     @Test
     public void candidatoAutenticaPeloTipoGeralComCredenciaisCertas(){
@@ -15,7 +15,7 @@ public class AutentificacaoServiceTest {
         // aqui o metodo recebe Autenticavel (tipo geral), mas quem vai chegar é um Candidato
         Autenticavel pessoa = new Candidato("Carlos", "12345678901", "carlos", "12345");
         
-        boolean resultado = AutentificacaoService.processarAutentificacao(pessoa, "carlos", "12345");
+        boolean resultado = AutenticacaoService.processarAutenticacao(pessoa, "carlos", "12345");
         
         assertTrue(resultado);
             
@@ -25,7 +25,7 @@ public class AutentificacaoServiceTest {
     public void candidatoAutenticaPeloTipoGeralComCredenciaisErradas(){
         // agora quem chega é um Recrutador com senha errada
         Autenticavel pessoa = new Recrutador("Vanda", "98765432100", "vanda", "54321");
-        boolean resultado = AutentificacaoService.processarAutentificacao(pessoa, "vanda", "errada");
+        boolean resultado = AutenticacaoService.processarAutenticacao(pessoa, "vanda", "errada");
         
         assertFalse(resultado);
         

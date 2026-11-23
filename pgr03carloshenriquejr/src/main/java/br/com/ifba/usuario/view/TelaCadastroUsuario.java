@@ -47,7 +47,7 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         txtEmail = new javax.swing.JTextField();
         txtCpf = new javax.swing.JTextField();
-        txtNomeComp = new javax.swing.JTextField();
+        txtNome = new javax.swing.JTextField();
         txtConfSenha = new javax.swing.JPasswordField();
         txtSenha = new javax.swing.JPasswordField();
         btnCadastrar = new javax.swing.JButton();
@@ -96,8 +96,8 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
         txtCpf.addActionListener(this::txtCpfActionPerformed);
         getContentPane().add(txtCpf, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 90, 224, -1));
 
-        txtNomeComp.addActionListener(this::txtNomeCompActionPerformed);
-        getContentPane().add(txtNomeComp, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 50, 224, -1));
+        txtNome.addActionListener(this::txtNomeActionPerformed);
+        getContentPane().add(txtNome, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 50, 224, -1));
 
         txtConfSenha.setText("jPasswordField1");
         getContentPane().add(txtConfSenha, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 230, -1, -1));
@@ -142,13 +142,13 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtEmailActionPerformed
 
-    private void txtNomeCompActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeCompActionPerformed
+    private void txtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNomeCompActionPerformed
+    }//GEN-LAST:event_txtNomeActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
                                         
-        String nome = txtNomeComp.getText();
+        String nome = txtNome.getText();
         String cpf = txtCpf.getText();
         String email = txtEmail.getText();
         String login = txtLogin.getText();
@@ -202,7 +202,7 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
     private javax.swing.JTextField txtCpf;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtLogin;
-    private javax.swing.JTextField txtNomeComp;
+    private javax.swing.JTextField txtNome;
     private javax.swing.JPasswordField txtSenha;
     // End of variables declaration//GEN-END:variables
 }
