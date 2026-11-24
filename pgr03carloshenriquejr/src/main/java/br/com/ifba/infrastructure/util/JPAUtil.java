@@ -3,6 +3,7 @@ package br.com.ifba.infrastructure.util;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import java.util.Map;
 
 // unica responsabilidade: guardar a fabrica do JPA e entregar EntityManagers
 public class JPAUtil {
@@ -12,16 +13,22 @@ public class JPAUtil {
     private JPAUtil() {
     }
 
-    // aplica as migrations e cria a fabrica; so faz isso uma vez
-    public static synchronized void iniciar() {
+    // cria a fabrica com os dados de conexao do application.properties; so faz isso uma vez
+    public static synchronized void iniciar(ConfiguracaoBanco configuracao) {
         if (factory == null) {
-            new MigracaoBanco(new ConfiguracaoBanco()).aplicar();
-            factory = Persistence.createEntityManagerFactory("matchrhPU");
+            Map<String, Object> conexao = Map.of(
+                    "jakarta.persistence.jdbc.driver", configuracao.driver(),
+                    "jakarta.persistence.jdbc.url", configuracao.url(),
+                    "jakarta.persistence.jdbc.user", configuracao.usuario(),
+                    "jakarta.persistence.jdbc.password", configuracao.senha());
+            factory = Persistence.createEntityManagerFactory("matchrhPU", conexao);
         }
     }
 
-    public static EntityManager getEntityManager() {
-        iniciar();
+    public static synchronized EntityManager getEntityManager() {
+        if (factory == null) {
+            throw new IllegalStateException("O banco ainda não foi iniciado.");
+        }
         return factory.createEntityManager();
     }
 }

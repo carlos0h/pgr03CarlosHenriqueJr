@@ -1,51 +1,41 @@
 package br.com.ifba.infrastructure.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-// unica responsabilidade: ler os dados de conexao do persistence.xml
+// unica responsabilidade: guardar os dados de conexao que o Spring le do application.properties
+@Component
 public class ConfiguracaoBanco {
 
-    private final Map<String, String> propriedades;
+    private final String url;
+    private final String usuario;
+    private final String senha;
+    private final String driver;
 
-    public ConfiguracaoBanco() {
-        this.propriedades = lerPersistenceXml();
+    public ConfiguracaoBanco(
+            @Value("${spring.datasource.url}") String url,
+            @Value("${spring.datasource.username}") String usuario,
+            @Value("${spring.datasource.password}") String senha,
+            @Value("${spring.datasource.driver-class-name}") String driver) {
+        this.url = url;
+        this.usuario = usuario;
+        this.senha = senha;
+        this.driver = driver;
     }
 
     public String url() {
-        return propriedades.get("jakarta.persistence.jdbc.url");
+        return url;
     }
 
     public String usuario() {
-        return propriedades.get("jakarta.persistence.jdbc.user");
+        return usuario;
     }
 
     public String senha() {
-        return propriedades.get("jakarta.persistence.jdbc.password");
+        return senha;
     }
 
-    private static Map<String, String> lerPersistenceXml() {
-        try (InputStream in = ConfiguracaoBanco.class.getResourceAsStream("/META-INF/persistence.xml")) {
-            if (in == null) {
-                throw new IllegalStateException("persistence.xml não encontrado em META-INF.");
-            }
-            NodeList nos = DocumentBuilderFactory.newInstance()
-                    .newDocumentBuilder().parse(in).getElementsByTagName("property");
-            Map<String, String> lidas = new HashMap<>();
-            for (int i = 0; i < nos.getLength(); i++) {
-                Element e = (Element) nos.item(i);
-                lidas.put(e.getAttribute("name"), e.getAttribute("value"));
-            }
-            return lidas;
-        } catch (IOException | ParserConfigurationException | SAXException e) {
-            throw new IllegalStateException("Não foi possível ler o persistence.xml: " + e.getMessage(), e);
-        }
+    public String driver() {
+        return driver;
     }
 }

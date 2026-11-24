@@ -8,8 +8,10 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import java.util.List;
 import java.util.function.Supplier;
+import org.springframework.stereotype.Repository;
 
 // DAO de usuario: herda o CRUD do GenericDao e acrescenta as buscas do dominio
+@Repository
 public class UsuarioDao extends GenericDao<Usuario> implements UsuarioIDao {
 
     public UsuarioDao() {

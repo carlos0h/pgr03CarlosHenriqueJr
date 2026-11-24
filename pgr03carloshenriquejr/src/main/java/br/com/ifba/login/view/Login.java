@@ -1,14 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package br.com.ifba.login.view;
 import br.com.ifba.usuario.entity.Usuario;
 import br.com.ifba.usuario.controller.UsuarioIController;
-/**
- *
- * @author carlos
- */
+import org.springframework.stereotype.Component;
+
+@Component
 public class Login extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Login.class.getName());

@@ -1,8 +1,10 @@
 package br.com.ifba.infrastructure.util;
 
 import org.flywaydb.core.Flyway;
+import org.springframework.stereotype.Component;
 
 // unica responsabilidade: aplicar as migrations do Flyway no banco
+@Component
 public class MigracaoBanco {
 
     private final ConfiguracaoBanco configuracao;
