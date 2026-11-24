@@ -6,8 +6,10 @@ import br.com.ifba.usuario.exception.DadosInvalidosException;
 import br.com.ifba.usuario.exception.LoginDuplicadoException;
 import br.com.ifba.usuario.validar.ValidadorUsuario;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 // regras de negocio de usuario; o service decide, o dao so grava e le
+@Service
 public class UsuarioService implements UsuarioIService {
 
     // depende da INTERFACE do dao, nunca da classe concreta

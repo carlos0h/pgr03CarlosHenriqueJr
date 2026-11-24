@@ -1,0 +1,6 @@
+# conexao com o banco: copie este arquivo para application.properties e preencha
+# o application.properties real nao e versionado (tem a senha)
+spring.datasource.url=jdbc:postgresql://localhost:5432/NOME_DO_BANCO
+spring.datasource.username=
+spring.datasource.password=
+spring.datasource.driver-class-name=org.postgresql.Driver
