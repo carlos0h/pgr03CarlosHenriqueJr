@@ -3,7 +3,8 @@ package br.com.ifba.usuario.repositorio;
 import br.com.ifba.usuario.entity.Usuario;
 import java.util.List;
 import org.springframework.data.repository.Repository;
-
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface UsuarioRepository extends Repository<Usuario, Long> {
 
@@ -22,4 +23,13 @@ public interface UsuarioRepository extends Repository<Usuario, Long> {
     boolean existsByLogin(String login);
 
     boolean existsByLoginAndIdNot(String login, Long id);
+    
+        // o nome derivado (findByNomeContainingIgnoreCaseOrLoginContainingIgnoreCaseOrderByNomeAsc) seria ilegivel: JPQL
+    @Query("""
+            select u from Usuario u
+            where lower(u.nome) like lower(concat('%', :texto, '%'))
+               or lower(u.login) like lower(concat('%', :texto, '%'))
+            order by u.nome asc
+            """)
+    List<Usuario> buscarPorNomeOuLogin(@Param("texto") String texto);
 }

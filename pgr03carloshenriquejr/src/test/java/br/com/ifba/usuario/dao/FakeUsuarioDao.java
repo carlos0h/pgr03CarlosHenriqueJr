@@ -29,6 +29,7 @@ public class FakeUsuarioDao implements UsuarioRepository {
         return usuario;
     }
 
+    
     @Override
     public boolean existsById(Long id) {
         return usuarios.stream().anyMatch(u -> u.getId().equals(id));
@@ -65,7 +66,20 @@ public class FakeUsuarioDao implements UsuarioRepository {
     public boolean existsByLoginAndIdNot(String login, Long id) {
         return usuarios.stream().anyMatch(u -> u.getLogin().equals(login) && !u.getId().equals(id));
     }
-
+    
+    @Override
+    public List<Usuario> buscarPorNomeOuLogin(String texto) {
+        String procurado = texto.toLowerCase();
+        List<Usuario> resultado = new ArrayList<>();
+        for (Usuario u : usuarios) {
+            if (u.getNome().toLowerCase().contains(procurado) || u.getLogin().toLowerCase().contains(procurado)) {
+                resultado.add(u);
+            }
+        }
+        resultado.sort(Comparator.comparing(Usuario::getNome));
+        return resultado;
+    }
+    
     // apoio dos testes (nao fazem parte do contrato do repositorio)
     public List<Usuario> findAll() {
         return new ArrayList<>(usuarios);
@@ -74,4 +88,5 @@ public class FakeUsuarioDao implements UsuarioRepository {
     public Usuario findById(Long id) {
         return usuarios.stream().filter(u -> u.getId().equals(id)).findFirst().orElseThrow();
     }
+    
 }
