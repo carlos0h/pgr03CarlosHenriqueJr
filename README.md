@@ -200,3 +200,25 @@ Com a List, buscar por login percorre item por item (um `for`) até achar — co
 Com o Map, a busca vai direto na chave (login) sem percorrer nada — o tempo praticamente não muda entre 10 e 10 mil usuários, por isso o repositório usa Map para indexar por login.
 
 
+
+## Atividade 23 - Spring Data JPA
+
+### Task 02 - O que ficou sem dono
+O commit `cfad7d3` só remove arquivos: o Spring Data gera o que o `GenericDao` e o `UsuarioDao` faziam à mão, e o Spring Boot passou a configurar o banco e rodar o Flyway sozinho. Saída de `git diff --stat HEAD~1 HEAD`:
+
+     .../src/main/java/br/com/ifba/infrastructure/dao/GenericDao.java  | 134 -----------------------------
+     .../src/main/java/br/com/ifba/infrastructure/dao/GenericIDao.java |  24 ------
+     .../java/br/com/ifba/infrastructure/util/ConfiguracaoBanco.java   |  41 ---------
+     .../java/br/com/ifba/infrastructure/util/InicializadorBanco.java  |  24 ------
+     .../src/main/java/br/com/ifba/infrastructure/util/JPAUtil.java    |  34 --------
+     .../main/java/br/com/ifba/infrastructure/util/MigracaoBanco.java  |  22 -----
+     .../src/main/java/br/com/ifba/usuario/dao/UsuarioDao.java         |  81 -----------------
+     .../src/main/java/br/com/ifba/usuario/dao/UsuarioIDao.java        |  18 ----
+     pgr03carloshenriquejr/src/main/resources/META-INF/persistence.xml |  12 ---
+     .../test/java/br/com/ifba/infrastructure/dao/GenericDaoTest.java  |  60 -----------------------
+     .../src/test/java/br/com/ifba/usuario/dao/UsuarioDaoTest.java     |  34 -------
+     11 files changed, 484 deletions(-)
+
+**Total de linhas removidas: 484**, em 11 arquivos:
+- 390 linhas de código de produção e configuração (`GenericDao`, `GenericIDao`, `UsuarioDao`, `UsuarioIDao`, `JPAUtil`, `ConfiguracaoBanco`, `MigracaoBanco`, `InicializadorBanco` e o `persistence.xml`);
+- 94 linhas de teste (`GenericDaoTest` e `UsuarioDaoTest`), que testavam as classes apagadas.
