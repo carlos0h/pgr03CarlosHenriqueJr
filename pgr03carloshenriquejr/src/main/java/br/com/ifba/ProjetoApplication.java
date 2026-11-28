@@ -4,13 +4,12 @@ import br.com.ifba.login.view.Login;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
+import lombok.extern.slf4j.Slf4j;
 
 // ponto de entrada: o Spring varre o pacote br.com.ifba e monta as camadas sozinho
 @SpringBootApplication
+@Slf4j
 public class ProjetoApplication {
-
-        private static final java.util.logging.Logger logger =
-            java.util.logging.Logger.getLogger(ProjetoApplication.class.getName());
 
     public static void main(String[] args) {
         usarNimbus();
@@ -21,8 +20,9 @@ public class ProjetoApplication {
 
             Login tela = context.getBean(Login.class); // a tela vem pronta do conteiner
             tela.setVisible(true);
+            log.info("Aplicação iniciada: tela de login aberta");
         } catch (RuntimeException e) {
-            logger.log(java.util.logging.Level.SEVERE, "Erro ao iniciar a aplicação", e);
+            log.error("Erro ao iniciar a aplicação", e);
             javax.swing.JOptionPane.showMessageDialog(null,
                     "Não foi possível iniciar a aplicação. Verifique a conexão com o banco e o application.properties.",
                     "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
@@ -38,8 +38,7 @@ public class ProjetoApplication {
                 }
             }
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ProjetoApplication.class.getName())
-                    .log(java.util.logging.Level.SEVERE, null, ex);
+            log.error("Não foi possível aplicar o Nimbus", ex);
         }
     }
 }

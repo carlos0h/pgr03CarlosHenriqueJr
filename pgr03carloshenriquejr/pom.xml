@@ -29,6 +29,11 @@
             <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
+                <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.netbeans.external</groupId>
             <artifactId>AbsoluteLayout</artifactId>
@@ -72,5 +77,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>25</maven.compiler.release>
         <exec.mainClass>br.com.ifba.ProjetoApplication</exec.mainClass>
+                <maven.compiler.proc>full</maven.compiler.proc>
     </properties>
 </project>

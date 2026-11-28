@@ -4,14 +4,12 @@ import br.com.ifba.infrastructure.exception.FalhaPersistenciaException;
 import br.com.ifba.usuario.controller.UsuarioIController;
 import br.com.ifba.usuario.exception.DadosInvalidosException;
 import br.com.ifba.usuario.exception.LoginDuplicadoException;
+import lombok.extern.slf4j.Slf4j;
 
-/**
- *
- * @author carlos
- */
+
+@Slf4j
 public class TelaCadastroUsuario extends javax.swing.JFrame {
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TelaCadastroUsuario.class.getName());
 
     private final UsuarioIController controller;
     private final TelaListarUsuarios listagem; // fica null quando aberta pela tela de login
@@ -172,8 +170,8 @@ public class TelaCadastroUsuario extends javax.swing.JFrame {
         } catch (LoginDuplicadoException e) {
             javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Login já existe", javax.swing.JOptionPane.WARNING_MESSAGE);
         } catch (FalhaPersistenciaException e) {
-            logger.log(java.util.logging.Level.SEVERE, "Erro ao cadastrar usuário", e);
-            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+            log.error("mensagem", e);
+            javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Erro ao cadastrar usuário", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
     
     }//GEN-LAST:event_btnCadastrarActionPerformed

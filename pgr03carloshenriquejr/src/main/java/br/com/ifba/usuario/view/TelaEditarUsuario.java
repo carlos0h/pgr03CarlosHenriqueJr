@@ -5,13 +5,11 @@ import br.com.ifba.usuario.controller.UsuarioIController;
 import br.com.ifba.usuario.entity.Usuario;
 import br.com.ifba.usuario.exception.DadosInvalidosException;
 import br.com.ifba.usuario.exception.LoginDuplicadoException;
-/**
- *
- * @author carlos
- */
-public class TelaEditarUsuario extends javax.swing.JFrame {
+import lombok.extern.slf4j.Slf4j;
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TelaEditarUsuario.class.getName());
+
+@Slf4j
+public class TelaEditarUsuario extends javax.swing.JFrame {
 
     private final UsuarioIController controller;
     private final Usuario usuario;
@@ -142,7 +140,7 @@ public class TelaEditarUsuario extends javax.swing.JFrame {
         } catch (LoginDuplicadoException e) {
             javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Login já existe", javax.swing.JOptionPane.WARNING_MESSAGE);
         } catch (FalhaPersistenciaException e) {
-            logger.log(java.util.logging.Level.SEVERE, "Erro ao atualizar usuário", e);
+            log.error("Erro ao atualizar usuário", e);
             javax.swing.JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
         listagem.recarregar();
