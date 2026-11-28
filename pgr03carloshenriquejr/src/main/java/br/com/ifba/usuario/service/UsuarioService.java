@@ -9,16 +9,15 @@ import br.com.ifba.usuario.validar.ValidadorUsuario;
 import java.util.List;
 import java.util.function.Supplier;
 import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 
 // regras de negocio de usuario; o service decide, o repositorio so grava e le
+// regras de negocio de usuario; o service decide, o repositorio so grava e le
 @Service
+@RequiredArgsConstructor
 public class UsuarioService implements UsuarioIService {
 
     private final UsuarioRepository repository;
-
-    public UsuarioService(UsuarioRepository repository) {
-        this.repository = repository;
-    }
 
     @Override
     public void cadastrar(Usuario usuario) {

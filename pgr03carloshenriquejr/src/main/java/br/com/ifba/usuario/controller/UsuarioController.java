@@ -3,17 +3,15 @@ package br.com.ifba.usuario.controller;
 import br.com.ifba.usuario.entity.Usuario;
 import br.com.ifba.usuario.service.UsuarioIService;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
 // recebe os pedidos da tela, monta o objeto e repassa ao service
 @Controller
+@RequiredArgsConstructor
 public class UsuarioController implements UsuarioIController {
 
     private final UsuarioIService service;
-
-    public UsuarioController(UsuarioIService service) {
-        this.service = service;
-    }
 
     @Override
     public void cadastrar(String nome, String cpf, String email, String login, String senha) {
