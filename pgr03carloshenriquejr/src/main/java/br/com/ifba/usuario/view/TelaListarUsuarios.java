@@ -6,7 +6,6 @@ import br.com.ifba.usuario.entity.Usuario;
 
 public class TelaListarUsuarios extends javax.swing.JFrame {
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TelaListarUsuarios.class.getName());
 
     private final UsuarioIController controller;
     private java.util.List<Usuario> usuariosExibidos = new java.util.ArrayList<>();
