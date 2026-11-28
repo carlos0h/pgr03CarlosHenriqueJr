@@ -1,122 +1,71 @@
 package br.com.ifba.usuario.entity;
+
+import br.com.ifba.infrastructure.entity.PersistenceEntity;
 import br.com.ifba.usuario.interfaces.Autenticavel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import br.com.ifba.infrastructure.entity.PersistenceEntity;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 // classe base do dominio - superclasse de Candidato e Recrutador
 @Entity
 @Table(name = "usuarios")
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(exclude = "senha")
+@EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
 public class Usuario extends PersistenceEntity implements Autenticavel {
-    
+
+    @Getter
+    @Setter
     @Column(nullable = false)
     private String nome;
     
+    @Getter
+    @Setter
+    @EqualsAndHashCode.Include
     @Column(nullable = false, unique = true, length = 11)
     private String cpf;
-    
+
+    @Getter
+    @Setter
     private String email;
-    
+
+    @Getter
+    @Setter
     @Column(nullable = false, unique = true)
     private String login;
-    
+
+    @Getter
+    @Setter
     @Column(nullable = false)
     private String senha;
-    
-    // preenchida pelo proprio banco (DEFAULT CURRENT_TIMESTAMP da V2), por isso nao entra no INSERT
+
+    // preenchida pelo proprio banco (DEFAULT CURRENT_TIMESTAMP da V2): so tem getter e nao entra no INSERT
+    @Getter
     @Column(name = "data_cadastro", insertable = false, updatable = false)
     private java.time.LocalDateTime dataCadastro;
-    
-    public Usuario(){
-    }
-    
+
+    // o Lombok nao gera este formato (sem email e sem dataCadastro), por isso continua escrito a mao
     public Usuario(String nome, String cpf, String login, String senha) {
         this.nome = nome;
         this.cpf = cpf;
         this.login = login;
         this.senha = senha;
     }
-    
-    public java.time.LocalDateTime getDataCadastro() {
-        return dataCadastro;
-    }
 
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-    
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-    
     // metodo generico, sobrescrito por Candidato e Recrutador
     public String getDescricao() {
         return "Usuario: " + nome;
     }
-    
-    
+
     @Override
-    public boolean autenticar(String login, String senha){
+    public boolean autenticar(String login, String senha) {
         return this.login.equals(login) && this.senha.equals(senha);
     }
-    
-      // a identidade do usuario e o CPF, e vale para qualquer subtipo:
-    // Candidato e Recrutador entram no lugar de Usuario sem mudar o resultado da comparacao
-    @Override
-    public boolean equals(Object obj){
-        if (this == obj){
-            return true;
-        }
-        if (!(obj instanceof Usuario)){
-            return false;
-        }
-        Usuario outro = (Usuario) obj;
-        return cpf != null && cpf.equals(outro.cpf);
-    }
-    
-    @Override
-    public int hashCode(){
-        if(cpf != null){
-            return cpf.hashCode();
-        }else{
-            return 0; 
-        }
-    }
-    
 }
